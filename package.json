@@ -9,6 +9,10 @@
     "test": "ng test",
     "serve:ssr:agora-coming-soon": "node dist/agora-coming-soon/server/server.mjs"
   },
+  "engines": {
+    "npm": ">=9.8.1",
+    "node": ">=18.18.0"
+  },
   "private": true,
   "dependencies": {
     "@angular/animations": "^17.3.0",
