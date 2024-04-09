@@ -1,17 +1,17 @@
 <div
-  class="w-full md:bg-[#FFF5ED] min-h-screen flex flex-col items-center font-work justify-center py-[80px]"
+  class="w-full md:bg-[#FFF5ED] min-h-screen flex flex-col items-center font-work justify-center"
 >
   <div
-    class="flex  justify-center md:max-w-6xl md:rounded-2xl md:shadow overflow-hidden md:bg-white"
+    class="flex justify-center md:max-w-6xl md:rounded-2xl md:shadow overflow-hidden md:bg-white"
   >
-    <div class="w-full sm:w-auto py-8 px-4 sm:p-12 md:p-16">
+    <div class="w-full sm:w-auto py-8 px-4 sm:p-12 md:px-[20px] md:py-[25px]">
       <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
         <div class="text-center text-3xl leading-[30px] font-inter'">
-          Stvarajmo
+          Savršene
           <span class="font-caveat font-bold text-[#f63d68] text-4xl"
-            >savršene</span
+            >trenutke,</span
           >
-          <br />trenutke zajedno
+          <br />stvarajmo zajedno
         </div>
         <!-- Logo -->
         <div class="w-full pt-3">
@@ -22,9 +22,9 @@
         <div class="mt-8 text-3xl font-extrabold tracking-tight leading-tight">
           Još samo malo!
         </div>
-        <div class="mt-0.5">
-          Želiš da budeš obavešten kada budemo spremni? Prijavi se ispod kako
-          bismo mogli da te obavestimo!
+        <div class="mt-1">
+          Želiš da te obavestimo kada krenemo sa radom? Prijavi se ispod kako
+          bismo mogli da ti pošaljemo E-mail!
         </div>
 
         <!-- Coming soon form -->
@@ -54,14 +54,21 @@
             </div>
           </div>
           <!-- Email field -->
-          <mat-form-field class="w-full">
+          <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
             <mat-label>E-mail</mat-label>
             <input matInput [formControlName]="'email'" />
+            <mat-error *ngIf="comingSoonForm.get('email')?.hasError('email')"
+              >E-mail adresa nije validna</mat-error
+            >
+            <mat-error *ngIf="comingSoonForm.get('email')?.hasError('required')"
+              >Ovo polje je obavezno</mat-error
+            >
           </mat-form-field>
 
           <mat-form-field
             *ngIf="this.comingSoonForm.get('isVendor')?.value"
-            class="w-full"
+            class="w-full pt-5"
+            [subscriptSizing]="'dynamic'"
           >
             <mat-label>Tip vendora</mat-label>
             <mat-select [formControlName]="'vendorTypeKey'">
@@ -77,44 +84,81 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field
-            class="w-full"
+            class="w-full pt-5"
+            [subscriptSizing]="'dynamic'"
             *ngIf="this.comingSoonForm.get('isVendor')?.value"
           >
             <mat-label>Grad</mat-label>
             <input matInput [formControlName]="'city'" />
+            <mat-error *ngIf="comingSoonForm.get('city')?.hasError('pattern')"
+              >Koristiti samo slova i razmake.</mat-error
+            >
+            <mat-error *ngIf="comingSoonForm.get('city')?.hasError('maxlength')"
+              >Maksimalno 50 karaktera.</mat-error
+            >
           </mat-form-field>
           <mat-form-field
-            class="w-full"
+            class="w-full pt-5"
+            [subscriptSizing]="'dynamic'"
             *ngIf="this.comingSoonForm.get('isVendor')?.value"
           >
             <mat-label>Kontakt telefon</mat-label>
             <input matInput [formControlName]="'phone'" />
+            <mat-error *ngIf="comingSoonForm.get('phone')?.hasError('pattern')"
+              >Koristiti samo brojeve i razmake.</mat-error
+            >
+            <mat-error
+              *ngIf="comingSoonForm.get('phone')?.hasError('maxlength')"
+              >Maksimalno 15 karaktera.</mat-error
+            >
           </mat-form-field>
 
           <div
-            *ngIf="!showComment && this.comingSoonForm.get('isVendor')?.value"
-            class="pb-5 pt-2 border-t-[1px]"
+            *ngIf="
+              !showComment &&
+              this.comingSoonForm.get('isVendor')?.value &&
+              !showThanks
+            "
+            class="pb-5 pt-5"
           >
             <span
-              class="text-indigo-600 cursor-pointer"
+              class="text-blue-600 cursor-pointer"
               (click)="showComment = true"
               >Želiš da dodaš komentar?</span
             >
           </div>
 
           <mat-form-field
+            [subscriptSizing]="'dynamic'"
             *ngIf="showComment && this.comingSoonForm.get('isVendor')?.value"
-            class="w-full"
+            class="w-full pt-5"
           >
             <mat-label>Komentar</mat-label>
             <textarea matInput rows="3" [formControlName]="'message'">
             </textarea>
+            <mat-error
+              *ngIf="comingSoonForm.get('message')?.hasError('pattern')"
+              >Koristiti samo slova,brojeve,razmake i specijalne karaktere
+              .,?!-.</mat-error
+            >
+            <mat-error
+              *ngIf="comingSoonForm.get('message')?.hasError('maxlength')"
+              >Maksimalno 250 karaktera.</mat-error
+            >
           </mat-form-field>
+
+          <div
+            *ngIf="showAlert"
+            class="my-5 font-work flex flex-col justify-center items-center text-white bg-[#E31B54] gap-[2px] rounded-[12px] border border-[#ffff] py-4"
+          >
+            <span class="font-semibold">Došlo je do greške!</span>
+            <span class="italic">Molimo Vas da pokšate ponovo!</span>
+          </div>
 
           <!-- Submit button -->
           <button
             *ngIf="!showThanks"
-            class="w-full mt-3 submit-button"
+            class="w-full mt-5 submit-button"
             mat-raised-button
             type="submit"
             [disabled]="comingSoonForm.disabled || comingSoonForm.invalid"
@@ -129,7 +173,7 @@
 
           <div
             *ngIf="showThanks"
-            class="font-work flex flex-col justify-center items-center text-white bg-[#f63d68] gap-[2px] rounded-[12px] border border-[#ffff] py-4"
+            class="mt-5 font-work flex flex-col justify-center items-center text-white bg-[#f63d68] gap-[2px] rounded-[12px] border border-[#ffff] py-4"
           >
             <span class="font-semibold">Uspešno ste se prijavili!</span>
             <span class="italic">Hvala na poverenju!</span>
@@ -143,6 +187,5 @@
         </form>
       </div>
     </div>
-   
   </div>
 </div>

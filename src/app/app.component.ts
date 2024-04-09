@@ -59,10 +59,25 @@ export class AppComponent implements OnInit {
     this.comingSoonForm = this._formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       vendorTypeKey: [''],
-      city: [''],
+      city: [
+        '',
+        [
+          Validators.pattern(/^[a-zA-ZčćšđžČĆŽĐŠ ]{1,50}$/),
+          Validators.maxLength(50),
+        ],
+      ],
       isVendor: [true, Validators.required],
-      message: [''],
-      phone: [''],
+      message: [
+        '',
+        [
+          Validators.pattern(/^[0-9a-zA-ZčČćĆšŠđĐžŽ.?!,\- ]{1,250}$/),
+          Validators.maxLength(250),
+        ],
+      ],
+      phone: [
+        '',
+        [Validators.pattern(/^[0-9 ]{1,15}$/), Validators.maxLength(15)],
+      ],
     });
   }
 
@@ -94,7 +109,10 @@ export class AppComponent implements OnInit {
         },
         error: () => {
           this.showAlert = true;
-          this.comingSoonForm.disable();
+          this.comingSoonForm.enable();
+          setTimeout(() => {
+            this.showAlert = false;
+          }, 3000);
         },
       });
   }
