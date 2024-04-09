@@ -27,7 +27,6 @@ module.exports = {
   },
     extend: {
       fontFamily: {
-        inter: ['"Inter var"'],
         work: ['"Work Sans"', 'sans-serif'],
         caveat: ['"Caveat"', 'cursive'],
       }
